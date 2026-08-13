@@ -11,7 +11,7 @@
   <link rel="manifest" href="/site.webmanifest" />
   <meta name="apple-mobile-web-app-title" content="lkristof" />
 
-  <link rel="icon" type="image/svg+xml" href="/assets/images/favicon.svg" />
+  <link id="favicon" rel="icon" type="image/svg+xml" href="/assets/images/favicon-light.svg" />
   <link rel="icon" type="image/png" href="/assets/images/favicon-96x96.png" sizes="96x96" />
   <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png" />
 
@@ -624,6 +624,8 @@
     const langSwitch = document.querySelector(".lang-switch");
     const langButtons = document.querySelectorAll(".lang-btn");
     const themeToggle = document.getElementById("themeToggle");
+    const favicon = document.getElementById("favicon");
+    const systemDarkMode = window.matchMedia("(prefers-color-scheme: dark)");
 
     function getInitialLanguage() {
       const savedLanguage = localStorage.getItem("lkristof-tools-language");
@@ -670,7 +672,13 @@
     function getEffectiveTheme() {
       const explicitTheme = document.documentElement.dataset.theme;
       if (explicitTheme) return explicitTheme;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+      return systemDarkMode.matches ? "dark" : "light";
+    }
+
+    function updateFavicon() {
+      favicon.href = systemDarkMode.matches
+        ? "/assets/images/favicon-dark.svg"
+        : "/assets/images/favicon-light.svg";
     }
 
     function updateThemeIcon() {
@@ -691,6 +699,9 @@
       document.documentElement.dataset.theme = storedTheme;
     }
     updateThemeIcon();
+    updateFavicon();
+
+    systemDarkMode.addEventListener?.("change", updateFavicon);
 
     themeToggle.addEventListener("click", () => {
       const nextTheme = getEffectiveTheme() === "dark" ? "light" : "dark";
