@@ -115,6 +115,75 @@
       letter-spacing: -0.065em;
     }
 
+    .tools-word {
+      display: inline-flex;
+      align-items: baseline;
+      gap: .01em;
+    }
+
+    .eye-letter {
+      position: relative;
+      display: inline-block;
+      width: .68em;
+      height: .68em;
+      margin: 0 -.02em;
+      vertical-align: .02em;
+      border: .075em solid currentColor;
+      border-radius: 50%;
+      background: var(--surface-hover);
+      overflow: hidden;
+      box-shadow: inset 0 0 0 .025em rgba(100,116,139,.18);
+    }
+
+    .eye-letter::after {
+      content: "";
+      position: absolute;
+      z-index: 2;
+      left: -8%;
+      top: -8%;
+      width: 116%;
+      height: 116%;
+      border-bottom: .075em solid currentColor;
+      border-radius: 50% 50% 46% 46%;
+      background: currentColor;
+      transform: translateY(-101%);
+      pointer-events: none;
+    }
+
+    .eye-letter.blinking::after {
+      animation: eyelid-blink .24s ease-in-out;
+    }
+
+    @keyframes eyelid-blink {
+      0%, 100% { transform: translateY(-101%); }
+      44%, 58% { transform: translateY(0); }
+    }
+
+    .eye-pupil {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: .24em;
+      height: .24em;
+      border-radius: 50%;
+      background: currentColor;
+      transform: translate(-50%, -50%);
+      transition: transform .08s linear;
+      will-change: transform;
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .eye-pupil {
+        transform: translate(-50%, -50%) !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .eye-letter.blinking::after {
+        animation: none !important;
+      }
+    }
+
     .hero p {
       max-width: 620px;
       margin: 24px auto 0;
@@ -455,7 +524,10 @@
   </div>
   <main class="page">
     <section class="hero">
-      <h1>lkristof Tools</h1>
+      <h1>lkristof T<span class="tools-word" aria-label="Tools">
+        <span class="eye-letter" aria-hidden="true"><span class="eye-pupil"></span></span>
+        <span class="eye-letter" aria-hidden="true"><span class="eye-pupil"></span></span>ls
+      </span></h1>
 
       <p data-i18n="heroDescription">
         Egyszerű, gyors és böngészőből használható eszközök.
@@ -620,6 +692,62 @@
     langButtons.forEach((button) => {
       button.addEventListener("click", () => setLanguage(button.dataset.lang));
     });
+
+    const eyeLetters = document.querySelectorAll(".eye-letter");
+    const canTrackPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    function updateEyes(event) {
+      if (!canTrackPointer.matches) return;
+
+      eyeLetters.forEach((eye) => {
+        const pupil = eye.querySelector(".eye-pupil");
+        const rect = eye.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+        const maxTravel = rect.width * 0.18;
+        const x = Math.cos(angle) * maxTravel;
+        const y = Math.sin(angle) * maxTravel;
+
+        pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+      });
+    }
+
+    function resetEyes() {
+      eyeLetters.forEach((eye) => {
+        eye.querySelector(".eye-pupil").style.transform = "translate(-50%, -50%)";
+      });
+    }
+
+    window.addEventListener("pointermove", updateEyes, { passive: true });
+    window.addEventListener("pointerleave", resetEyes);
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+    function blinkEyes() {
+      if (prefersReducedMotion.matches) return;
+
+      eyeLetters.forEach((eye) => eye.classList.add("blinking"));
+      window.setTimeout(() => {
+        eyeLetters.forEach((eye) => eye.classList.remove("blinking"));
+      }, 260);
+    }
+
+    function scheduleBlink() {
+      const delay = 2500 + Math.random() * 3500;
+
+      window.setTimeout(() => {
+        blinkEyes();
+
+        if (Math.random() < 0.2) {
+          window.setTimeout(blinkEyes, 220);
+        }
+
+        scheduleBlink();
+      }, delay);
+    }
+
+    scheduleBlink();
 
     document.getElementById("year").textContent = new Date().getFullYear();
     setLanguage(getInitialLanguage(), false);
