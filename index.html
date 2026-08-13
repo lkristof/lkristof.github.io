@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="lkristof Tools – egyszerű, gyors és böngészőből használható online eszközök." />
+  <meta name="theme-color" content="#0f172a" />
+
+  <title>lkristof Tools</title>
+
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --surface: rgba(255, 255, 255, 0.78);
+      --surface-hover: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --border: rgba(148, 163, 184, 0.24);
+      --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
+      --shadow-hover: 0 28px 60px rgba(15, 23, 42, 0.14);
+      --radius: 24px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family:
+        Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 15% 10%, rgba(59, 130, 246, 0.12), transparent 28rem),
+        radial-gradient(circle at 85% 15%, rgba(168, 85, 247, 0.10), transparent 26rem),
+        radial-gradient(circle at 50% 100%, rgba(16, 185, 129, 0.08), transparent 30rem),
+        var(--bg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 72px 0 36px;
+    }
+
+    .hero {
+      max-width: 760px;
+      margin: 0 auto 52px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      padding: 8px 13px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(255,255,255,.66);
+      color: #475569;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: .02em;
+      backdrop-filter: blur(12px);
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.7rem, 8vw, 5.4rem);
+      line-height: .98;
+      letter-spacing: -0.065em;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 24px auto 0;
+      color: var(--muted);
+      font-size: clamp(1rem, 2.2vw, 1.15rem);
+      line-height: 1.7;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      min-height: 330px;
+      flex-direction: column;
+      overflow: hidden;
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+      transition:
+        transform .22s ease,
+        box-shadow .22s ease,
+        border-color .22s ease,
+        background .22s ease;
+    }
+
+    .card:hover,
+    .card:focus-visible {
+      transform: translateY(-7px);
+      background: var(--surface-hover);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(100,116,139,.32);
+      outline: none;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      top: -90px;
+      right: -70px;
+      border-radius: 50%;
+      filter: blur(2px);
+      opacity: .18;
+    }
+
+    .card.mozaik::before {
+      background: linear-gradient(
+        135deg,
+        #FFB13B 0%,
+        #FF7A1A 35%,
+        #F05A24 68%,
+        #B91825 100%
+      );
+    }
+
+    .card.qr::before {
+      background: #6366f1;
+    }
+
+    .card.collage::before {
+      background: #6757E8;
+    }
+
+    .icon {
+      display: grid;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      margin-bottom: 30px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 12px 30px rgba(15,23,42,.12);
+      overflow: hidden;
+    }
+
+    .icon img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .tag {
+      margin-bottom: 10px;
+      color: #64748b;
+      font-size: .76rem;
+      font-weight: 800;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .card h2 {
+      margin: 0;
+      font-size: 1.55rem;
+      letter-spacing: -.035em;
+    }
+
+    .card p {
+      margin: 13px 0 24px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    .open {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-top: auto;
+      padding-top: 22px;
+      border-top: 1px solid var(--border);
+      font-size: .94rem;
+      font-weight: 750;
+    }
+
+    .arrow {
+      display: grid;
+      width: 36px;
+      height: 36px;
+      place-items: center;
+      border-radius: 50%;
+      background: #f1f5f9;
+      transition: transform .2s ease, background .2s ease;
+    }
+
+    .card:hover .arrow,
+    .card:focus-visible .arrow {
+      transform: translateX(3px);
+      background: #e2e8f0;
+    }
+
+    footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 44px;
+      color: #94a3b8;
+      font-size: .86rem;
+      text-align: center;
+    }
+
+    @media (max-width: 840px) {
+      .page {
+        padding-top: 48px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        min-height: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #020617;
+        --surface: rgba(15, 23, 42, .72);
+        --surface-hover: rgba(15, 23, 42, .94);
+        --text: #f8fafc;
+        --muted: #94a3b8;
+        --border: rgba(148, 163, 184, .16);
+        --shadow: 0 20px 45px rgba(0, 0, 0, .24);
+        --shadow-hover: 0 28px 60px rgba(0, 0, 0, .36);
+      }
+
+      .eyebrow {
+        background: rgba(15,23,42,.6);
+        color: #cbd5e1;
+      }
+
+      .icon {
+        background: rgba(255, 255, 255, .92);
+      }
+
+      .arrow {
+        background: #1e293b;
+      }
+
+      .card:hover .arrow,
+      .card:focus-visible .arrow {
+        background: #334155;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="hero">
+      <div class="eyebrow">
+        <span class="dot"></span>
+        Online eszközök
+      </div>
+
+      <h1>lkristof Tools</h1>
+
+      <p>
+        Egyszerű, gyors és böngészőből használható eszközök.
+      </p>
+    </section>
+
+    <section class="grid" aria-label="Elérhető alkalmazások">
+      <a class="card mozaik" href="./kepmozaik/" aria-label="KépMozaik megnyitása">
+        <div class="icon"><img src="./kepmozaik/assets/images/favicon-v2.svg" alt="" /></div>
+        <div class="tag">Mozaik</div>
+        <h2>KépMozaik</h2>
+        <p>
+          Készíts több képből látványos, testreszabható mozaikot.
+        </p>
+        <div class="open">
+          <span>Megnyitás</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <a class="card collage" href="./collage-studio/" aria-label="Collage Studio megnyitása">
+        <div class="icon"><img src="./collage-studio/assets/images/favicon.svg" alt="" /></div>
+        <div class="tag">Kollázs</div>
+        <h2>Collage Studio</h2>
+        <p>
+          Rakj össze egyedi kollázsokat, rendezd el a képeket,
+          majd exportáld a kész kompozíciót.
+        </p>
+        <div class="open">
+          <span>Megnyitás</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </div>
+      </a>
+
+      <a class="card qr" href="./qr-studio/" aria-label="QR Studio megnyitása">
+        <div class="icon"><img src="./qr-studio/assets/images/favicon.svg" alt="" /></div>
+        <div class="tag">QR-kód</div>
+        <h2>QR Studio</h2>
+        <p>
+          Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be
+          kamerával vagy képfájlból.
+        </p>
+        <div class="open">
+          <span>Megnyitás</span>
+          <span class="arrow" aria-hidden="true">→</span>
+        </div>
+      </a>
+    </section>
+
+    <footer>
+      <span>© <span id="year"></span> lkristof.github.io</span>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
