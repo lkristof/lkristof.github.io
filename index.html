@@ -173,7 +173,7 @@
 
     @media (hover: none), (pointer: coarse) {
       .eye-pupil {
-        transform: translate3d(-50%, -50%, 0) !important;
+        transition: transform .18s ease-out;
       }
     }
 
@@ -694,12 +694,15 @@
 
     const eyeLetters = document.querySelectorAll(".eye-letter");
     const canTrackPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const mobileEyeMode = window.matchMedia("(hover: none), (pointer: coarse)");
 
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
     let isAnimating = false;
+    let mobileGlanceTimer = null;
+    let mobileReturnTimer = null;
 
     const EASE = 0.15;
 
@@ -749,6 +752,46 @@
       });
     }
 
+    function setMobileGlance(direction) {
+      const verticalJitter = (Math.random() - 0.5) * 0.28;
+
+      eyeLetters.forEach((eye) => {
+        const pupil = eye.querySelector(".eye-pupil");
+        const rect = eye.getBoundingClientRect();
+        const maxTravel = rect.width * 0.18;
+        const x = direction * maxTravel;
+        const y = verticalJitter * maxTravel;
+
+        pupil.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0)`;
+      });
+    }
+
+    function clearMobileGlanceTimers() {
+      window.clearTimeout(mobileGlanceTimer);
+      window.clearTimeout(mobileReturnTimer);
+      mobileGlanceTimer = null;
+      mobileReturnTimer = null;
+    }
+
+    function scheduleMobileGlance() {
+      clearMobileGlanceTimers();
+      resetEyes();
+
+      if (!mobileEyeMode.matches || prefersReducedMotion.matches) return;
+
+      const delay = 1800 + Math.random() * 3200;
+      mobileGlanceTimer = window.setTimeout(() => {
+        const direction = Math.random() < 0.5 ? -1 : 1;
+        setMobileGlance(direction);
+
+        const glanceDuration = 420 + Math.random() * 480;
+        mobileReturnTimer = window.setTimeout(() => {
+          resetEyes();
+          scheduleMobileGlance();
+        }, glanceDuration);
+      }, delay);
+    }
+
     window.addEventListener("pointermove", updateEyes, { passive: true });
     window.addEventListener("pointerleave", resetEyes);
 
@@ -778,6 +821,10 @@
     }
 
     scheduleBlink();
+    scheduleMobileGlance();
+
+    mobileEyeMode.addEventListener?.("change", scheduleMobileGlance);
+    prefersReducedMotion.addEventListener?.("change", scheduleMobileGlance);
 
     document.getElementById("year").textContent = new Date().getFullYear();
     setLanguage(getInitialLanguage(), false);
