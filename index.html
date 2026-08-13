@@ -116,7 +116,10 @@
       border-radius: var(--radius);
       background: var(--surface);
       box-shadow: var(--shadow);
+      -webkit-backdrop-filter: blur(18px);
       backdrop-filter: blur(18px);
+      -webkit-mask-image: -webkit-radial-gradient(white, black);
+      isolation: isolate;
       transition:
         transform .22s ease,
         box-shadow .22s ease,
@@ -141,7 +144,6 @@
       top: -90px;
       right: -70px;
       border-radius: 50%;
-      filter: blur(2px);
       opacity: .18;
     }
 
