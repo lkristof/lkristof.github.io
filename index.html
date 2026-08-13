@@ -167,14 +167,13 @@
       height: .24em;
       border-radius: 50%;
       background: currentColor;
-      transform: translate(-50%, -50%);
-      transition: transform .08s linear;
+      transform: translate3d(-50%, -50%, 0);
       will-change: transform;
     }
 
     @media (hover: none), (pointer: coarse) {
       .eye-pupil {
-        transform: translate(-50%, -50%) !important;
+        transform: translate3d(-50%, -50%, 0) !important;
       }
     }
 
@@ -696,26 +695,57 @@
     const eyeLetters = document.querySelectorAll(".eye-letter");
     const canTrackPointer = window.matchMedia("(hover: hover) and (pointer: fine)");
 
-    function updateEyes(event) {
-      if (!canTrackPointer.matches) return;
+    let targetX = 0;
+    let targetY = 0;
+    let currentX = 0;
+    let currentY = 0;
+    let isAnimating = false;
+
+    const EASE = 0.15;
+
+    function animateEyes() {
+      currentX += (targetX - currentX) * EASE;
+      currentY += (targetY - currentY) * EASE;
 
       eyeLetters.forEach((eye) => {
         const pupil = eye.querySelector(".eye-pupil");
         const rect = eye.getBoundingClientRect();
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
-        const angle = Math.atan2(event.clientY - centerY, event.clientX - centerX);
+
+        const angle = Math.atan2(currentY - centerY, currentX - centerX);
         const maxTravel = rect.width * 0.18;
         const x = Math.cos(angle) * maxTravel;
         const y = Math.sin(angle) * maxTravel;
 
-        pupil.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+        pupil.style.transform = `translate3d(calc(-50% + ${x}px), calc(-50% + ${y}px), 0)`;
       });
+
+      const deltaX = Math.abs(targetX - currentX);
+      const deltaY = Math.abs(targetY - currentY);
+
+      if (deltaX > 0.01 || deltaY > 0.01) {
+        requestAnimationFrame(animateEyes);
+      } else {
+        isAnimating = false;
+      }
+    }
+
+    function updateEyes(event) {
+      if (!canTrackPointer.matches) return;
+
+      targetX = event.clientX;
+      targetY = event.clientY;
+
+      if (!isAnimating) {
+        isAnimating = true;
+        requestAnimationFrame(animateEyes);
+      }
     }
 
     function resetEyes() {
       eyeLetters.forEach((eye) => {
-        eye.querySelector(".eye-pupil").style.transform = "translate(-50%, -50%)";
+        eye.querySelector(".eye-pupil").style.transform = "translate3d(-50%, -50%, 0)";
       });
     }
 
