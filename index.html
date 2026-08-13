@@ -19,6 +19,8 @@
       --shadow: 0 20px 45px rgba(15, 23, 42, 0.08);
       --shadow-hover: 0 28px 60px rgba(15, 23, 42, 0.14);
       --radius: 24px;
+      --theme-toggle-bg: rgba(255,255,255,.66);
+      --theme-toggle-border: rgba(148,163,184,.24);
     }
 
     * {
@@ -48,6 +50,52 @@
       text-decoration: none;
     }
 
+
+    .top-controls {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .theme-toggle {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border: 1px solid var(--theme-toggle-border);
+      border-radius: 999px;
+      background: var(--theme-toggle-bg);
+      color: var(--text);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 24px rgba(15,23,42,.08);
+      cursor: pointer;
+      transition:
+        transform .2s ease,
+        background .2s ease,
+        border-color .2s ease;
+    }
+
+    .theme-toggle:hover {
+      background: var(--surface-hover);
+      border-color: rgba(100,116,139,.32);
+    }
+
+    .theme-toggle:focus-visible {
+      outline: 2px solid #6366f1;
+      outline-offset: 3px;
+    }
+
+    .theme-toggle svg {
+      width: 20px;
+      height: 20px;
+      stroke: currentColor;
+    }
+
     .page {
       width: min(1120px, calc(100% - 32px));
       margin: 0 auto;
@@ -58,30 +106,6 @@
       max-width: 760px;
       margin: 0 auto 52px;
       text-align: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 18px;
-      padding: 8px 13px;
-      border: 1px solid var(--border);
-      border-radius: 999px;
-      background: rgba(255,255,255,.66);
-      color: #475569;
-      font-size: 0.85rem;
-      font-weight: 700;
-      letter-spacing: .02em;
-      backdrop-filter: blur(12px);
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #22c55e;
-      box-shadow: 0 0 0 4px rgba(34,197,94,.12);
     }
 
     h1 {
@@ -236,6 +260,56 @@
       background: #e2e8f0;
     }
 
+
+    .lang-switch {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      margin-top: 0;
+      padding: 4px;
+      min-height: 42px;
+      border: 1px solid var(--theme-toggle-border);
+      border-radius: 999px;
+      background: var(--theme-toggle-bg);
+      -webkit-backdrop-filter: blur(14px);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 24px rgba(15,23,42,.08);
+    }
+
+    .lang-btn {
+      appearance: none;
+      border: 0;
+      border-radius: 999px;
+      padding: 7px 11px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .04em;
+      cursor: pointer;
+      transition:
+        background .2s ease,
+        color .2s ease,
+        box-shadow .2s ease;
+    }
+
+    .lang-btn:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.34);
+    }
+
+    .lang-btn.active {
+      background: var(--surface-hover);
+      color: var(--text);
+      box-shadow: 0 4px 12px rgba(15,23,42,.08);
+    }
+
+    .lang-btn:focus-visible {
+      outline: 2px solid #6366f1;
+      outline-offset: 2px;
+    }
+
     footer {
       display: flex;
       justify-content: center;
@@ -245,9 +319,32 @@
       text-align: center;
     }
 
+
+    @media (max-width: 520px) {
+      .top-controls {
+        top: 12px;
+        right: 12px;
+        gap: 6px;
+      }
+
+      .page {
+        padding-top: 96px;
+      }
+
+      .theme-toggle {
+        width: 40px;
+        height: 40px;
+      }
+
+      .lang-btn {
+        padding: 6px 9px;
+        font-size: .76rem;
+      }
+    }
+
     @media (max-width: 840px) {
       .page {
-        padding-top: 48px;
+        padding-top: 88px;
       }
 
       .grid {
@@ -257,6 +354,38 @@
       .card {
         min-height: 0;
       }
+    }
+
+
+    html[data-theme="dark"] {
+      --bg: #020617;
+      --surface: rgba(15, 23, 42, .72);
+      --surface-hover: rgba(15, 23, 42, .94);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: rgba(148, 163, 184, .16);
+      --shadow: 0 20px 45px rgba(0, 0, 0, .24);
+      --shadow-hover: 0 28px 60px rgba(0, 0, 0, .36);
+      --theme-toggle-bg: rgba(15,23,42,.72);
+      --theme-toggle-border: rgba(148,163,184,.18);
+    }
+
+    html[data-theme="dark"] .lang-switch {
+      background: rgba(15,23,42,.6);
+    }
+
+    html[data-theme="dark"] .icon {
+      background: rgba(255, 255, 255, .92);
+    }
+
+    html[data-theme="dark"] .arrow,
+    html[data-theme="dark"] .lang-btn.active {
+      background: #1e293b;
+    }
+
+    html[data-theme="dark"] .card:hover .arrow,
+    html[data-theme="dark"] .card:focus-visible .arrow {
+      background: #334155;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -269,7 +398,7 @@
     }
 
     @media (prefers-color-scheme: dark) {
-      :root {
+      html:not([data-theme]) {
         --bg: #020617;
         --surface: rgba(15, 23, 42, .72);
         --surface-hover: rgba(15, 23, 42, .94);
@@ -280,13 +409,21 @@
         --shadow-hover: 0 28px 60px rgba(0, 0, 0, .36);
       }
 
-      .eyebrow {
-        background: rgba(15,23,42,.6);
-        color: #cbd5e1;
-      }
-
       .icon {
         background: rgba(255, 255, 255, .92);
+      }
+
+
+      .lang-switch {
+        background: rgba(15,23,42,.6);
+      }
+
+      .lang-btn.active {
+        background: #1e293b;
+      }
+
+      .lang-btn:hover {
+        background: rgba(51,65,85,.55);
       }
 
       .arrow {
@@ -302,58 +439,58 @@
 </head>
 
 <body>
+  <div class="top-controls">
+    <div class="lang-switch" aria-label="Nyelvválasztó">
+      <button class="lang-btn" type="button" data-lang="hu" aria-label="Magyar nyelv">HU</button>
+      <button class="lang-btn" type="button" data-lang="en" aria-label="English language">EN</button>
+    </div>
+
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Téma váltása" title="Téma váltása">
+      <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+      </svg>
+    </button>
+  </div>
   <main class="page">
     <section class="hero">
-      <div class="eyebrow">
-        <span class="dot"></span>
-        Online eszközök
-      </div>
-
       <h1>lkristof Tools</h1>
 
-      <p>
+      <p data-i18n="heroDescription">
         Egyszerű, gyors és böngészőből használható eszközök.
       </p>
     </section>
 
-    <section class="grid" aria-label="Elérhető alkalmazások">
-      <a class="card mozaik" href="./kepmozaik/" aria-label="KépMozaik megnyitása">
+    <section class="grid" aria-label="Elérhető alkalmazások" data-i18n-aria="appsLabel">
+      <a class="card mozaik" href="./kepmozaik/" aria-label="KépMozaik megnyitása" data-i18n-aria="kepmozaikAria">
         <div class="icon"><img src="./kepmozaik/assets/images/favicon.svg" alt="" /></div>
-        <div class="tag">Mozaik</div>
+        <div class="tag" data-i18n="kepmozaikTag">Mozaik</div>
         <h2>KépMozaik</h2>
-        <p>
-          Készíts több képből látványos, testreszabható mozaikot.
-        </p>
+        <p data-i18n="kepmozaikDescription">Készíts több képből látványos, testreszabható mozaikot.</p>
         <div class="open">
-          <span>Megnyitás</span>
+          <span data-i18n="open">Megnyitás</span>
           <span class="arrow" aria-hidden="true">→</span>
         </div>
       </a>
 
-      <a class="card collage" href="./collage-studio/" aria-label="Collage Studio megnyitása">
+      <a class="card collage" href="./collage-studio/" aria-label="Collage Studio megnyitása" data-i18n-aria="collageAria">
         <div class="icon"><img src="./collage-studio/assets/images/favicon.svg" alt="" /></div>
-        <div class="tag">Kollázs</div>
+        <div class="tag" data-i18n="collageTag">Kollázs</div>
         <h2>Collage Studio</h2>
-        <p>
-          Rakj össze egyedi kollázsokat, rendezd el a képeket,
-          majd exportáld a kész kompozíciót.
-        </p>
+        <p data-i18n="collageDescription">Rakj össze egyedi kollázsokat, rendezd el a képeket, majd exportáld a kész kompozíciót.</p>
         <div class="open">
-          <span>Megnyitás</span>
+          <span data-i18n="open">Megnyitás</span>
           <span class="arrow" aria-hidden="true">→</span>
         </div>
       </a>
 
-      <a class="card qr" href="./qr-studio/" aria-label="QR Studio megnyitása">
+      <a class="card qr" href="./qr-studio/" aria-label="QR Studio megnyitása" data-i18n-aria="qrAria">
         <div class="icon"><img src="./qr-studio/assets/images/favicon.svg" alt="" /></div>
-        <div class="tag">QR-kód</div>
+        <div class="tag" data-i18n="qrTag">QR-kód</div>
         <h2>QR Studio</h2>
-        <p>
-          Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be
-          kamerával vagy képfájlból.
-        </p>
+        <p data-i18n="qrDescription">Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be kamerával vagy képfájlból.</p>
         <div class="open">
-          <span>Megnyitás</span>
+          <span data-i18n="open">Megnyitás</span>
           <span class="arrow" aria-hidden="true">→</span>
         </div>
       </a>
@@ -365,7 +502,126 @@
   </main>
 
   <script>
+    const translations = {
+      hu: {
+        metaDescription: "lkristof Tools – egyszerű, gyors és böngészőből használható online eszközök.",
+        heroDescription: "Egyszerű, gyors és böngészőből használható eszközök.",
+        appsLabel: "Elérhető alkalmazások",
+        kepmozaikAria: "KépMozaik megnyitása",
+        collageAria: "Collage Studio megnyitása",
+        qrAria: "QR Studio megnyitása",
+        kepmozaikTag: "Mozaik",
+        collageTag: "Kollázs",
+        qrTag: "QR-kód",
+        kepmozaikDescription: "Készíts több képből látványos, testreszabható mozaikot.",
+        collageDescription: "Rakj össze egyedi kollázsokat, rendezd el a képeket, majd exportáld a kész kompozíciót.",
+        qrDescription: "Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be kamerával vagy képfájlból.",
+        open: "Megnyitás",
+        languageSwitcher: "Nyelvválasztó",
+        themeToggle: "Téma váltása"
+      },
+      en: {
+        metaDescription: "lkristof Tools – simple, fast online tools that run in your browser.",
+        heroDescription: "Simple, fast tools that run in your browser.",
+        appsLabel: "Available applications",
+        kepmozaikAria: "Open KépMozaik",
+        collageAria: "Open Collage Studio",
+        qrAria: "Open QR Studio",
+        kepmozaikTag: "Mosaic",
+        collageTag: "Collage",
+        qrTag: "QR code",
+        kepmozaikDescription: "Create beautiful, customizable mosaics from multiple images.",
+        collageDescription: "Create custom collages, arrange your images, and export the finished composition.",
+        qrDescription: "Create QR codes from links or text, or scan them using your camera or an image file.",
+        open: "Open",
+        languageSwitcher: "Language selector",
+        themeToggle: "Toggle theme"
+      }
+    };
+
+    const metaDescription = document.querySelector('meta[name="description"]');
+    const langSwitch = document.querySelector(".lang-switch");
+    const langButtons = document.querySelectorAll(".lang-btn");
+    const themeToggle = document.getElementById("themeToggle");
+
+    function getInitialLanguage() {
+      const savedLanguage = localStorage.getItem("lkristof-tools-language");
+      if (savedLanguage === "hu" || savedLanguage === "en") return savedLanguage;
+      return navigator.language.toLowerCase().startsWith("hu") ? "hu" : "en";
+    }
+
+    function setLanguage(language, persist = true) {
+      const t = translations[language] || translations.en;
+
+      document.documentElement.lang = language;
+      metaDescription.setAttribute("content", t.metaDescription);
+      langSwitch.setAttribute("aria-label", t.languageSwitcher);
+      themeToggle.setAttribute("aria-label", t.themeToggle);
+      themeToggle.setAttribute("title", t.themeToggle);
+
+      document.querySelectorAll("[data-i18n]").forEach((element) => {
+        const key = element.dataset.i18n;
+        if (t[key]) element.textContent = t[key];
+      });
+
+      document.querySelectorAll("[data-i18n-aria]").forEach((element) => {
+        const key = element.dataset.i18nAria;
+        if (t[key]) element.setAttribute("aria-label", t[key]);
+      });
+
+      langButtons.forEach((button) => {
+        const isActive = button.dataset.lang === language;
+        button.classList.toggle("active", isActive);
+        button.setAttribute("aria-pressed", String(isActive));
+      });
+
+      if (persist) {
+        localStorage.setItem("lkristof-tools-language", language);
+      }
+    }
+
+
+    function getStoredTheme() {
+      const savedTheme = localStorage.getItem("lkristof-tools-theme");
+      return savedTheme === "light" || savedTheme === "dark" ? savedTheme : null;
+    }
+
+    function getEffectiveTheme() {
+      const explicitTheme = document.documentElement.dataset.theme;
+      if (explicitTheme) return explicitTheme;
+      return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+
+    function updateThemeIcon() {
+      const isDark = getEffectiveTheme() === "dark";
+      themeToggle.innerHTML = isDark
+        ? '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>';
+    }
+
+    function setTheme(theme) {
+      document.documentElement.dataset.theme = theme;
+      localStorage.setItem("lkristof-tools-theme", theme);
+      updateThemeIcon();
+    }
+
+    const storedTheme = getStoredTheme();
+    if (storedTheme) {
+      document.documentElement.dataset.theme = storedTheme;
+    }
+    updateThemeIcon();
+
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = getEffectiveTheme() === "dark" ? "light" : "dark";
+      setTheme(nextTheme);
+    });
+
+    langButtons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    });
+
     document.getElementById("year").textContent = new Date().getFullYear();
+    setLanguage(getInitialLanguage(), false);
   </script>
 </body>
 </html>
