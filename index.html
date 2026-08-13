@@ -407,31 +407,32 @@
         --border: rgba(148, 163, 184, .16);
         --shadow: 0 20px 45px rgba(0, 0, 0, .24);
         --shadow-hover: 0 28px 60px rgba(0, 0, 0, .36);
+        --theme-toggle-bg: rgba(15,23,42,.72);
+        --theme-toggle-border: rgba(148,163,184,.18);
       }
 
-      .icon {
+      html:not([data-theme]) .icon {
         background: rgba(255, 255, 255, .92);
       }
 
-
-      .lang-switch {
+      html:not([data-theme]) .lang-switch {
         background: rgba(15,23,42,.6);
       }
 
-      .lang-btn.active {
+      html:not([data-theme]) .lang-btn.active {
         background: #1e293b;
       }
 
-      .lang-btn:hover {
+      html:not([data-theme]) .lang-btn:hover {
         background: rgba(51,65,85,.55);
       }
 
-      .arrow {
+      html:not([data-theme]) .arrow {
         background: #1e293b;
       }
 
-      .card:hover .arrow,
-      .card:focus-visible .arrow {
+      html:not([data-theme]) .card:hover .arrow,
+      html:not([data-theme]) .card:focus-visible .arrow {
         background: #334155;
       }
     }
@@ -595,8 +596,8 @@
     function updateThemeIcon() {
       const isDark = getEffectiveTheme() === "dark";
       themeToggle.innerHTML = isDark
-        ? '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path></svg>'
-        : '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>';
+        ? '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>'
+        : '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path></svg>';
     }
 
     function setTheme(theme) {
