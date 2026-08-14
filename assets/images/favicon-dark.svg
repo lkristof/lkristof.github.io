@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title desc">
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 64 64" role="img" aria-labelledby="title desc">
   <title id="title">LK icon for dark interface</title>
   <desc id="desc">White tile with a dark LK monogram.</desc>
   <defs>
@@ -23,12 +23,16 @@
       <stop offset="0.82" stop-color="#192831"/>
       <stop offset="1" stop-color="#0e1920"/>
     </linearGradient>
-    <path id="tileShape" d="M 384 0 C 219 0 130 18 77 69 C 19 124 0 219 0 384 L 0 640 C 0 805 19 900 77 955 C 130 1006 219 1024 384 1024 L 640 1024 C 805 1024 894 1006 947 955 C 1005 900 1024 805 1024 640 L 1024 384 C 1024 219 1005 124 947 69 C 894 18 805 0 640 0 Z"/>
+    <path id="tileShape" d="M 512 0 C 281.6 0 166.4 0 83.2 83.2 C 0 166.4 0 281.6 0 512 C 0 742.4 0 857.6 83.2 940.8 C 166.4 1024 281.6 1024 512 1024 C 742.4 1024 857.6 1024 940.8 940.8 C 1024 857.6 1024 742.4 1024 512 C 1024 281.6 1024 166.4 940.8 83.2 C 857.6 0 742.4 0 512 0 Z"/>
+    <clipPath id="tileClip"><use href="#tileShape"/></clipPath>
     <path id="letterL" d="M 204 242 H 291 V 692 H 519 L 594 773 H 204 Z"/>
     <path id="letterK" d="M 356 242 H 441 V 514 L 706 242 H 823 L 565 503 L 831 773 H 714 L 511 561 L 441 627 H 356 Z"/>
   </defs>
+  <g transform="scale(0.0625)" clip-path="url(#tileClip)">
   <use href="#tileShape" fill="url(#tileGradient)" stroke="url(#edgeGradient)" stroke-width="3"/>
   <use href="#tileShape" fill="url(#tileGlow)"/>
   <g fill="#728590" opacity="0.36" transform="translate(5 7)"><use href="#letterL"/><use href="#letterK"/></g>
   <g fill="url(#letterGradient)" stroke="#ffffff" stroke-opacity="0.88" stroke-width="2.4" stroke-linejoin="miter" paint-order="stroke fill"><use href="#letterL"/><use href="#letterK"/></g>
+
+  </g>
 </svg>
