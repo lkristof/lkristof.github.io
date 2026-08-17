@@ -123,6 +123,9 @@
       width: 20px;
       height: 20px;
       stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .page {
@@ -543,12 +546,7 @@
       <button class="lang-btn" type="button" data-lang="en" aria-label="English language">EN</button>
     </div>
 
-    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Téma váltása" title="Téma váltása">
-      <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <circle cx="12" cy="12" r="4"></circle>
-        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
-      </svg>
-    </button>
+    <button class="theme-toggle" type="button" id="themeToggle" aria-label="Téma: Automatikus. Következő: Világos." title="Megjelenési téma váltása"></button>
   </div>
   <main class="page">
     <section class="hero">
@@ -620,7 +618,11 @@
         qrDescription: "Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be kamerával vagy képfájlból.",
         open: "Megnyitás",
         languageSwitcher: "Nyelvválasztó",
-        themeToggle: "Téma váltása"
+        themeSwitch: "Megjelenési téma váltása",
+        themeLight: "Világos",
+        themeAuto: "Automatikus",
+        themeDark: "Sötét",
+        themeState: "Téma: {current}. Következő: {next}."
       },
       en: {
         metaDescription: "Fast, simple, browser-based web tools.",
@@ -638,7 +640,11 @@
         qrDescription: "Create QR codes from links or text, or scan them using your camera or an image file.",
         open: "Open",
         languageSwitcher: "Language selector",
-        themeToggle: "Toggle theme"
+        themeSwitch: "Change appearance theme",
+        themeLight: "Light",
+        themeAuto: "Automatic",
+        themeDark: "Dark",
+        themeState: "Theme: {current}. Next: {next}."
       }
     };
 
@@ -661,8 +667,7 @@
       document.documentElement.lang = language;
       metaDescription.setAttribute("content", t.metaDescription);
       langSwitch.setAttribute("aria-label", t.languageSwitcher);
-      themeToggle.setAttribute("aria-label", t.themeToggle);
-      themeToggle.setAttribute("title", t.themeToggle);
+      updateThemeButtonA11y(language);
 
       document.querySelectorAll("[data-i18n]").forEach((element) => {
         const key = element.dataset.i18n;
@@ -686,15 +691,32 @@
     }
 
 
-    function getStoredTheme() {
+    const THEME_PREFERENCE_ORDER = ["auto", "light", "dark"];
+
+    function getStoredThemePreference() {
       const savedTheme = localStorage.getItem("lkristof-tools-theme");
-      return savedTheme === "light" || savedTheme === "dark" ? savedTheme : null;
+      return THEME_PREFERENCE_ORDER.includes(savedTheme) ? savedTheme : "auto";
     }
 
     function getEffectiveTheme() {
-      const explicitTheme = document.documentElement.dataset.theme;
-      if (explicitTheme) return explicitTheme;
+      const preference = getStoredThemePreference();
+      if (preference === "light" || preference === "dark") return preference;
       return systemDarkMode.matches ? "dark" : "light";
+    }
+
+    function applyThemePreference(preference, persist = true) {
+      if (preference === "light" || preference === "dark") {
+        document.documentElement.dataset.theme = preference;
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+      }
+
+      if (persist) {
+        localStorage.setItem("lkristof-tools-theme", preference);
+      }
+
+      updateThemeIcon();
+      updateThemeButtonA11y();
     }
 
     function updateFavicon() {
@@ -703,31 +725,75 @@
         : "/assets/images/favicon-light.svg";
     }
 
+    const themeIcons = {
+      light: `
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"></circle>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path>
+        </svg>
+      `,
+      auto: `
+        <svg class="theme-icon theme-icon-sun-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 2v2"></path>
+          <path d="M14.837 16.385a6 6 0 1 1-7.223-7.222c.624-.147.97.66.715 1.248a4 4 0 0 0 5.26 5.259c.589-.255 1.396.09 1.248.715"></path>
+          <path d="M16 12a4 4 0 0 0-4-4"></path>
+          <path d="m19 5-1.256 1.256"></path>
+          <path d="M20 12h2"></path>
+        </svg>
+      `,
+      dark: `
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path>
+        </svg>
+      `
+    };
+
     function updateThemeIcon() {
-      const isDark = getEffectiveTheme() === "dark";
-      themeToggle.innerHTML = isDark
-        ? '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>'
-        : '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"></path></svg>';
+      const preference = getStoredThemePreference();
+      themeToggle.innerHTML = themeIcons[preference];
+      updateFavicon();
     }
 
-    function setTheme(theme) {
-      document.documentElement.dataset.theme = theme;
-      localStorage.setItem("lkristof-tools-theme", theme);
-      updateThemeIcon();
+    function getThemeLabel(preference, language = document.documentElement.lang) {
+      const t = translations[language] || translations.en;
+      if (preference === "light") return t.themeLight;
+      if (preference === "dark") return t.themeDark;
+      return t.themeAuto;
     }
 
-    const storedTheme = getStoredTheme();
-    if (storedTheme) {
-      document.documentElement.dataset.theme = storedTheme;
+    function getNextThemePreference(preference) {
+      const currentIndex = THEME_PREFERENCE_ORDER.indexOf(preference);
+      const safeIndex = currentIndex === -1 ? 0 : currentIndex;
+      return THEME_PREFERENCE_ORDER[(safeIndex + 1) % THEME_PREFERENCE_ORDER.length];
     }
-    updateThemeIcon();
-    updateFavicon();
 
-    systemDarkMode.addEventListener?.("change", updateFavicon);
+    function updateThemeButtonA11y(language = document.documentElement.lang) {
+      const t = translations[language] || translations.en;
+      const current = getStoredThemePreference();
+      const next = getNextThemePreference(current);
+      themeToggle.setAttribute(
+        "aria-label",
+        t.themeState
+          .replace("{current}", getThemeLabel(current, language))
+          .replace("{next}", getThemeLabel(next, language))
+      );
+      themeToggle.setAttribute("title", t.themeSwitch);
+    }
+
+    applyThemePreference(getStoredThemePreference(), false);
+
+    systemDarkMode.addEventListener?.("change", () => {
+      if (getStoredThemePreference() === "auto") {
+        updateThemeIcon();
+        updateThemeButtonA11y();
+      } else {
+        updateFavicon();
+      }
+    });
 
     themeToggle.addEventListener("click", () => {
-      const nextTheme = getEffectiveTheme() === "dark" ? "light" : "dark";
-      setTheme(nextTheme);
+      const current = getStoredThemePreference();
+      applyThemePreference(getNextThemePreference(current));
     });
 
     langButtons.forEach((button) => {
