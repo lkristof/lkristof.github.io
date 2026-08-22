@@ -232,14 +232,14 @@
     .card {
       position: relative;
       display: flex;
-      min-height: 330px;
+      min-height: 300px;
       flex-direction: column;
       overflow: hidden;
-      padding: 26px;
+      padding: 24px;
       border: 1px solid var(--border);
       border-radius: var(--radius);
       background: var(--surface);
-      box-shadow: var(--shadow);
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.07);
       -webkit-backdrop-filter: blur(18px);
       backdrop-filter: blur(18px);
       -webkit-mask-image: -webkit-radial-gradient(white, black);
@@ -253,9 +253,9 @@
 
     .card:hover,
     .card:focus-visible {
-      transform: translateY(-7px);
+      transform: translateY(-4px);
       background: var(--surface-hover);
-      box-shadow: var(--shadow-hover);
+      box-shadow: 0 20px 45px rgba(15, 23, 42, 0.11);
       border-color: rgba(100,116,139,.32);
       outline: none;
     }
@@ -263,13 +263,14 @@
     .card::before {
       content: "";
       position: absolute;
-      width: 180px;
-      height: 180px;
-      top: -90px;
-      right: -70px;
+      width: 250px;
+      height: 250px;
+      top: -135px;
+      right: -110px;
       border-radius: 50%;
-      filter: blur(2px);
-      opacity: .18;
+      filter: blur(8px);
+      opacity: .12;
+      transition: opacity .22s ease, transform .22s ease;
     }
 
     .card.mozaik::before {
@@ -290,15 +291,39 @@
       background: #6757E8;
     }
 
+    .card:hover::before,
+    .card:focus-visible::before {
+      opacity: .17;
+      transform: scale(1.04);
+    }
+
+    .card.mozaik:hover .arrow,
+    .card.mozaik:focus-visible .arrow {
+      color: #9a3412;
+      background: rgba(249, 115, 22, .14);
+    }
+
+    .card.collage:hover .arrow,
+    .card.collage:focus-visible .arrow {
+      color: #5b21b6;
+      background: rgba(124, 58, 237, .14);
+    }
+
+    .card.qr:hover .arrow,
+    .card.qr:focus-visible .arrow {
+      color: #4338ca;
+      background: rgba(99, 102, 241, .14);
+    }
+
     .icon {
       display: grid;
-      width: 64px;
-      height: 64px;
+      width: 60px;
+      height: 60px;
       place-items: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
       padding: 2px;
       border: 1px solid var(--border);
-      border-radius: 18px;
+      border-radius: 16px;
       background: rgba(255, 255, 255, 0.82);
       box-shadow: 0 12px 30px rgba(15,23,42,.12);
       overflow: hidden;
@@ -311,15 +336,6 @@
       object-fit: contain;
     }
 
-    .tag {
-      margin-bottom: 10px;
-      color: #64748b;
-      font-size: .76rem;
-      font-weight: 800;
-      letter-spacing: .11em;
-      text-transform: uppercase;
-    }
-
     .card h2 {
       margin: 0;
       font-size: 1.55rem;
@@ -327,7 +343,7 @@
     }
 
     .card p {
-      margin: 13px 0 24px;
+      margin: 11px 0 20px;
       color: var(--muted);
       line-height: 1.65;
     }
@@ -338,8 +354,8 @@
       justify-content: space-between;
       gap: 16px;
       margin-top: auto;
-      padding-top: 22px;
-      border-top: 1px solid var(--border);
+      padding-top: 16px;
+      border-top: 1px solid rgba(148, 163, 184, .14);
       font-size: .94rem;
       font-weight: 750;
     }
@@ -474,6 +490,15 @@
       background: rgba(15,23,42,.6);
     }
 
+    html[data-theme="dark"] .card {
+      box-shadow: 0 14px 36px rgba(0, 0, 0, .22);
+    }
+
+    html[data-theme="dark"] .card:hover,
+    html[data-theme="dark"] .card:focus-visible {
+      box-shadow: 0 20px 45px rgba(0, 0, 0, .34);
+    }
+
     html[data-theme="dark"] .icon {
       background: rgba(255, 255, 255, .92);
     }
@@ -485,6 +510,7 @@
 
     html[data-theme="dark"] .card:hover .arrow,
     html[data-theme="dark"] .card:focus-visible .arrow {
+      color: #f8fafc;
       background: #334155;
     }
 
@@ -515,6 +541,15 @@
         background: rgba(255, 255, 255, .92);
       }
 
+      html:not([data-theme]) .card {
+        box-shadow: 0 14px 36px rgba(0, 0, 0, .22);
+      }
+
+      html:not([data-theme]) .card:hover,
+      html:not([data-theme]) .card:focus-visible {
+        box-shadow: 0 20px 45px rgba(0, 0, 0, .34);
+      }
+
       html:not([data-theme]) .lang-switch {
         background: rgba(15,23,42,.6);
       }
@@ -533,6 +568,7 @@
 
       html:not([data-theme]) .card:hover .arrow,
       html:not([data-theme]) .card:focus-visible .arrow {
+        color: #f8fafc;
         background: #334155;
       }
     }
@@ -563,7 +599,6 @@
     <section class="grid" aria-label="Elérhető alkalmazások" data-i18n-aria="appsLabel">
       <a class="card mozaik" href="/kepmozaik/" aria-label="KépMozaik megnyitása" data-i18n-aria="kepmozaikAria">
         <div class="icon"><img src="/kepmozaik/assets/images/favicon.svg" alt="" /></div>
-        <div class="tag" data-i18n="kepmozaikTag">Mozaik</div>
         <h2 data-i18n="kepmozaikName">KépMozaik</h2>
         <p data-i18n="kepmozaikDescription">Készíts több képből látványos, testreszabható mozaikot.</p>
         <div class="open">
@@ -574,7 +609,6 @@
 
       <a class="card collage" href="/collage-studio/" aria-label="Collage Studio megnyitása" data-i18n-aria="collageAria">
         <div class="icon"><img src="/collage-studio/assets/images/favicon.svg" alt="" /></div>
-        <div class="tag" data-i18n="collageTag">Kollázs</div>
         <h2 data-i18n="collageName">Kollázs Stúdió</h2>
         <p data-i18n="collageDescription">Rakj össze egyedi kollázsokat, rendezd el a képeket, majd exportáld a kész kompozíciót.</p>
         <div class="open">
@@ -585,7 +619,6 @@
 
       <a class="card qr" href="/qr-studio/" aria-label="QR Studio megnyitása" data-i18n-aria="qrAria">
         <div class="icon"><img src="/qr-studio/assets/images/favicon.svg" alt="" /></div>
-        <div class="tag" data-i18n="qrTag">QR-kód</div>
         <h2 data-i18n="qrName">QR Studió</h2>
         <p data-i18n="qrDescription">Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be kamerával vagy képfájlból.</p>
         <div class="open">
@@ -612,9 +645,6 @@
         collageAria: "Kollázs Stúdió megnyitása",
         qrName: "QR Stúdió",
         qrAria: "QR Stúdió megnyitása",
-        kepmozaikTag: "Mozaik",
-        collageTag: "Kollázs",
-        qrTag: "QR-kód",
         kepmozaikDescription: "Készíts több képből látványos, testreszabható mozaikot.",
         collageDescription: "Rakj össze egyedi kollázsokat, rendezd el a képeket, majd exportáld a kész kompozíciót.",
         qrDescription: "Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be kamerával vagy képfájlból.",
@@ -636,9 +666,6 @@
         collageAria: "Open Collage Studio",
         qrName: "QR Studio",
         qrAria: "Open QR Studio",
-        kepmozaikTag: "Mosaic",
-        collageTag: "Collage",
-        qrTag: "QR code",
         kepmozaikDescription: "Create beautiful, customizable mosaics from multiple images.",
         collageDescription: "Create custom collages, arrange your images, and export the finished composition.",
         qrDescription: "Create QR codes from links or text, or scan them using your camera or an image file.",
