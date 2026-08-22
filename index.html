@@ -251,13 +251,13 @@
         background .22s ease;
     }
 
-    .card:hover,
     .card:focus-visible {
       transform: translateY(-4px);
       background: var(--surface-hover);
       box-shadow: 0 20px 45px rgba(15, 23, 42, 0.11);
       border-color: rgba(100,116,139,.32);
-      outline: none;
+      outline: 2px solid #6366f1;
+      outline-offset: 3px;
     }
 
     .card::before {
@@ -291,25 +291,21 @@
       background: #6757E8;
     }
 
-    .card:hover::before,
     .card:focus-visible::before {
       opacity: .17;
       transform: scale(1.04);
     }
 
-    .card.mozaik:hover .arrow,
     .card.mozaik:focus-visible .arrow {
       color: #9a3412;
       background: rgba(249, 115, 22, .14);
     }
 
-    .card.collage:hover .arrow,
     .card.collage:focus-visible .arrow {
       color: #5b21b6;
       background: rgba(124, 58, 237, .14);
     }
 
-    .card.qr:hover .arrow,
     .card.qr:focus-visible .arrow {
       color: #4338ca;
       background: rgba(99, 102, 241, .14);
@@ -370,10 +366,58 @@
       transition: transform .2s ease, background .2s ease;
     }
 
-    .card:hover .arrow,
     .card:focus-visible .arrow {
       transform: translateX(3px);
-      background: #e2e8f0;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      .card:hover {
+        transform: translateY(-4px);
+        background: var(--surface-hover);
+        box-shadow: 0 20px 45px rgba(15, 23, 42, 0.11);
+        border-color: rgba(100,116,139,.32);
+      }
+
+      .card:hover::before {
+        opacity: .17;
+        transform: scale(1.04);
+      }
+
+      .card:hover .arrow {
+        transform: translateX(3px);
+      }
+
+      .card.mozaik:hover .arrow {
+        color: #9a3412;
+        background: rgba(249, 115, 22, .14);
+      }
+
+      .card.collage:hover .arrow {
+        color: #5b21b6;
+        background: rgba(124, 58, 237, .14);
+      }
+
+      .card.qr:hover .arrow {
+        color: #4338ca;
+        background: rgba(99, 102, 241, .14);
+      }
+    }
+
+    @media (hover: none), (pointer: coarse) {
+      .card:active {
+        transform: scale(.985);
+        background: var(--surface-hover);
+        border-color: rgba(100,116,139,.28);
+      }
+
+      .card:active::before {
+        opacity: .16;
+        transform: scale(1.025);
+      }
+
+      .card:active .arrow {
+        transform: translateX(2px);
+      }
     }
 
 
@@ -494,9 +538,14 @@
       box-shadow: 0 14px 36px rgba(0, 0, 0, .22);
     }
 
-    html[data-theme="dark"] .card:hover,
     html[data-theme="dark"] .card:focus-visible {
       box-shadow: 0 20px 45px rgba(0, 0, 0, .34);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      html[data-theme="dark"] .card:hover {
+        box-shadow: 0 20px 45px rgba(0, 0, 0, .34);
+      }
     }
 
     html[data-theme="dark"] .icon {
@@ -508,10 +557,16 @@
       background: #1e293b;
     }
 
-    html[data-theme="dark"] .card:hover .arrow,
     html[data-theme="dark"] .card:focus-visible .arrow {
       color: #f8fafc;
       background: #334155;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      html[data-theme="dark"] .card:hover .arrow {
+        color: #f8fafc;
+        background: #334155;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -545,7 +600,6 @@
         box-shadow: 0 14px 36px rgba(0, 0, 0, .22);
       }
 
-      html:not([data-theme]) .card:hover,
       html:not([data-theme]) .card:focus-visible {
         box-shadow: 0 20px 45px rgba(0, 0, 0, .34);
       }
@@ -566,8 +620,19 @@
         background: #1e293b;
       }
 
-      html:not([data-theme]) .card:hover .arrow,
       html:not([data-theme]) .card:focus-visible .arrow {
+        color: #f8fafc;
+        background: #334155;
+      }
+
+    }
+
+    @media (prefers-color-scheme: dark) and (hover: hover) and (pointer: fine) {
+      html:not([data-theme]) .card:hover {
+        box-shadow: 0 20px 45px rgba(0, 0, 0, .34);
+      }
+
+      html:not([data-theme]) .card:hover .arrow {
         color: #f8fafc;
         background: #334155;
       }
