@@ -273,6 +273,65 @@
       transition: opacity .22s ease, transform .22s ease;
     }
 
+    .card > * {
+      position: relative;
+      z-index: 2;
+    }
+
+    .splash-particle {
+      position: absolute;
+      left: 54px;
+      top: 54px;
+      z-index: 1;
+      width: var(--size, 10px);
+      height: var(--size, 10px);
+      border-radius: 999px;
+      background: var(--splash-color, #6366f1);
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, -50%) scale(.35);
+      filter: blur(var(--blur, 0px));
+      will-change: transform, opacity;
+    }
+
+    .splash-particle.is-splashing {
+      animation: icon-splash var(--duration, 900ms) cubic-bezier(.18,.7,.2,1) forwards;
+    }
+
+    @keyframes icon-splash {
+      0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(.3);
+      }
+      12% {
+        opacity: var(--peak-opacity, .42);
+      }
+      72% {
+        opacity: var(--tail-opacity, .26);
+      }
+      100% {
+        opacity: 0;
+        transform:
+          translate(
+            calc(-50% + var(--dx, 80px)),
+            calc(-50% + var(--dy, 30px))
+          )
+          scale(var(--end-scale, 1.15));
+      }
+    }
+
+    .card.mozaik .splash-particle {
+      --splash-color: #f97316;
+    }
+
+    .card.collage .splash-particle {
+      --splash-color: #6757E8;
+    }
+
+    .card.qr .splash-particle {
+      --splash-color: #6366f1;
+    }
+
     .card.mozaik::before {
       background: linear-gradient(
         135deg,
@@ -894,6 +953,62 @@
 
     langButtons.forEach((button) => {
       button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    });
+
+    const interactiveCards = document.querySelectorAll(".card");
+    const canSplashCards = window.matchMedia("(hover: hover) and (pointer: fine)");
+
+    function createIconSplash(card) {
+      if (!canSplashCards.matches || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      card.querySelectorAll(".splash-particle").forEach((particle) => particle.remove());
+
+      const cardRect = card.getBoundingClientRect();
+      const icon = card.querySelector(".icon");
+      if (!icon) return;
+
+      const iconRect = icon.getBoundingClientRect();
+      const originX = iconRect.left - cardRect.left + iconRect.width / 2;
+      const originY = iconRect.top - cardRect.top + iconRect.height / 2;
+
+      const particleCount = 13;
+      const baseAngles = [-70, -48, -26, -8, 10, 26, 42, 58, 76, 96, 116, 138, 158];
+
+      baseAngles.slice(0, particleCount).forEach((baseAngle, index) => {
+        const particle = document.createElement("span");
+        particle.className = "splash-particle";
+
+        const angle = (baseAngle + (Math.random() - .5) * 18) * Math.PI / 180;
+        const distance = 54 + Math.random() * 145;
+        const dx = Math.cos(angle) * distance;
+        const dy = Math.sin(angle) * distance;
+        const size = 5 + Math.random() * 13;
+        const duration = 650 + Math.random() * 650;
+        const blur = Math.random() < .35 ? 2 + Math.random() * 3 : 0;
+        const peakOpacity = .20 + Math.random() * .30;
+        const endScale = .75 + Math.random() * 1.15;
+
+        particle.style.left = `${originX}px`;
+        particle.style.top = `${originY}px`;
+        particle.style.setProperty("--dx", `${dx.toFixed(1)}px`);
+        particle.style.setProperty("--dy", `${dy.toFixed(1)}px`);
+        particle.style.setProperty("--size", `${size.toFixed(1)}px`);
+        particle.style.setProperty("--duration", `${duration.toFixed(0)}ms`);
+        particle.style.setProperty("--blur", `${blur.toFixed(1)}px`);
+        particle.style.setProperty("--peak-opacity", peakOpacity.toFixed(2));
+        particle.style.setProperty("--tail-opacity", (peakOpacity * .72).toFixed(2));
+        particle.style.setProperty("--end-scale", endScale.toFixed(2));
+        particle.style.animationDelay = `${index * 18}ms`;
+
+        card.appendChild(particle);
+        requestAnimationFrame(() => particle.classList.add("is-splashing"));
+
+        particle.addEventListener("animationend", () => particle.remove(), { once: true });
+      });
+    }
+
+    interactiveCards.forEach((card) => {
+      card.addEventListener("pointerenter", () => createIconSplash(card), { passive: true });
     });
 
     const eyeLetters = document.querySelectorAll(".eye-letter");
