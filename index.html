@@ -332,6 +332,14 @@
       --splash-color: #6366f1;
     }
 
+    .card.ph .splash-particle {
+      --splash-color: #ffcc33;
+    }
+
+    .card.ncore .splash-particle {
+      --splash-color: #fd7d79;
+    }
+
     .card.mozaik::before {
       background: linear-gradient(
         135deg,
@@ -348,6 +356,14 @@
 
     .card.collage::before {
       background: #6757E8;
+    }
+
+    .card.ph::before {
+      background: linear-gradient(135deg, #ffe36b 0%, #ffcc33 48%, #333333 100%);
+    }
+
+    .card.ncore::before {
+      background: linear-gradient(135deg, #ffaaa7 0%, #fd7d79 48%, #b84f4c 100%);
     }
 
     .card:focus-visible::before {
@@ -368,6 +384,16 @@
     .card.qr:focus-visible .arrow {
       color: #4338ca;
       background: rgba(99, 102, 241, .14);
+    }
+
+    .card.ph:focus-visible .arrow {
+      color: #4a3a00;
+      background: rgba(255, 204, 51, .22);
+    }
+
+    .card.ncore:focus-visible .arrow {
+      color: #b94945;
+      background: rgba(253, 125, 121, .18);
     }
 
     .icon {
@@ -459,6 +485,16 @@
       .card.qr:hover .arrow {
         color: #4338ca;
         background: rgba(99, 102, 241, .14);
+      }
+
+      .card.ph:hover .arrow {
+        color: #4a3a00;
+        background: rgba(255, 204, 51, .22);
+      }
+
+      .card.ncore:hover .arrow {
+        color: #b94945;
+        background: rgba(253, 125, 121, .18);
       }
     }
 
@@ -750,6 +786,26 @@
           <span class="arrow" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right-icon lucide-chevron-right"><path d="m9 18 6-6-6-6"/></svg></span>
         </div>
       </a>
+
+      <a class="card ph" href="https://raw.githubusercontent.com/lkristof/userscripts/main/ph-power-tools.user.js" aria-label="PH Power Tools telepítése" data-i18n-aria="phAria">
+        <div class="icon"><img src="https://cdn.rios.hu/design/ph/logo-favicon.png" alt="" /></div>
+        <h2 data-i18n="phName">PH Power Tools</h2>
+        <p data-i18n="phDescription">Prohardver! userscript hasznos fórumfunkciókkal és kényelmi extrákkal.</p>
+        <div class="open">
+          <span data-i18n="install">Telepítés</span>
+          <span class="arrow" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+        </div>
+      </a>
+
+      <a class="card ncore" href="https://raw.githubusercontent.com/lkristof/userscripts/main/ncore/ncore-tools.user.js" aria-label="nCore Tools telepítése" data-i18n-aria="ncoreAria">
+        <div class="icon"><img src="https://ncore.pro/hu/assets/favicon.svg" alt="" /></div>
+        <h2 data-i18n="ncoreName">nCore Tools</h2>
+        <p data-i18n="ncoreDescription">nCore userscript qBittorrent-integrációval és kényelmi funkciókkal.</p>
+        <div class="open">
+          <span data-i18n="install">Telepítés</span>
+          <span class="arrow" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+        </div>
+      </a>
     </section>
 
     <footer>
@@ -769,9 +825,16 @@
         collageAria: "Kollázs Stúdió megnyitása",
         qrName: "QR Stúdió",
         qrAria: "QR Stúdió megnyitása",
+        phName: "PH Power Tools",
+        phAria: "PH Power Tools telepítése",
+        ncoreName: "nCore Tools",
+        ncoreAria: "nCore Tools telepítése",
         kepmozaikDescription: "Készíts több képből látványos, testreszabható mozaikot.",
         collageDescription: "Rakj össze egyedi kollázsokat, rendezd el a képeket, majd exportáld a kész kompozíciót.",
         qrDescription: "Hozz létre QR-kódot linkből vagy szövegből, illetve olvasd be kamerával vagy képfájlból.",
+        phDescription: "Prohardver! userscript hasznos fórumfunkciókkal és kényelmi extrákkal.",
+        ncoreDescription: "nCore userscript qBittorrent-integrációval és kényelmi funkciókkal.",
+        install: "Telepítés",
         open: "Megnyitás",
         languageSwitcher: "Nyelvválasztó",
         themeSwitch: "Megjelenési téma váltása",
@@ -790,9 +853,16 @@
         collageAria: "Open Collage Studio",
         qrName: "QR Studio",
         qrAria: "Open QR Studio",
+        phName: "PH Power Tools",
+        phAria: "Install PH Power Tools",
+        ncoreName: "nCore Tools",
+        ncoreAria: "Install nCore Tools",
         kepmozaikDescription: "Create beautiful, customizable mosaics from multiple images.",
         collageDescription: "Create custom collages, arrange your images, and export the finished composition.",
         qrDescription: "Create QR codes from links or text, or scan them using your camera or an image file.",
+        phDescription: "Prohardver! userscript with useful forum features and convenience tools.",
+        ncoreDescription: "nCore userscript with qBittorrent integration and convenience features.",
+        install: "Install",
         open: "Open",
         languageSwitcher: "Language selector",
         themeSwitch: "Change appearance theme",
